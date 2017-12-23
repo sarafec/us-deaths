@@ -1,0 +1,39 @@
+body {
+	margin: 0;
+}
+
+/* HEADER */
+.header {
+	text-align: center;
+}
+
+.title {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 30px;
+}
+
+/* DROP DOWN */
+.state-menu {
+	font-size: 18px;
+	padding: 5px 10px;
+	margin-top: -10px;
+	background-color: transparent;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	text-indent: 1px;
+	text-overflow: '';
+	text-align-last: center;
+}
+
+
+/* CHART */
+
+/* RANGE */
+
+.circles {
+	cursor: pointer;
+}
+
+.circles:hover {
+	fill: #e5e4f0;
+}
