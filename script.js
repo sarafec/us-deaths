@@ -1,16 +1,16 @@
 // margin conventions
-let margin = { top: 20, right: 30, bottom: 30, left: 30 };
-let constant = {
+const margin = { top: 20, right: 30, bottom: 30, left: 30 };
+const constant = {
 	width: 600 - margin.left - margin.right,
 	height: 325 - margin.top - margin.bottom,
 	x: d3.scaleBand().rangeRound([0, 600 - margin.right]).padding(0.05),
 	y: d3.scaleLinear().rangeRound([500 - margin.top - margin.bottom, 0])
 };
 
-let menu = document.querySelector('.state-menu');
-let svg =  d3.select('.chart-container');
-let slopeElem = svg.append('g').attr('class', 'slope-chart').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-let rangeElem = svg.append('g').attr('class', 'year-range').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+const menu = document.querySelector('.state-menu');
+const svg =  d3.select('.chart-container');
+const slopeElem = svg.append('g').attr('class', 'slope-chart').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+const rangeElem = svg.append('g').attr('class', 'year-range').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
 function loadData() {
@@ -30,7 +30,7 @@ function loadData() {
 	});
 };
 
-let data = function() {
+const data = function() {
 	let dataSource = {};
 
 	let targetRange = [];
@@ -52,7 +52,7 @@ let data = function() {
 	}
 }();
 
-let draw = function() {
+const draw = function() {
 	function drawDropdown() {
 
 		for(let i = 0; i < data.source.length; i++){
@@ -86,9 +86,10 @@ let draw = function() {
 			.enter()
 			.append('circle')
 			.attr('class', 'circles')
+			.attr('data-year', function(d) { return d; })
 			.attr('r', 8)
 			.attr('cy', 275)
-			.attr('cx', function(d,) { return constant.x(d); } )
+			.attr('cx', function(d) { return constant.x(d); } )
 			.attr('fill', 'white')
 			.attr('stroke', 'black')
 			.attr('stroke-width', '.5px');
@@ -96,6 +97,9 @@ let draw = function() {
 		// transform text on x axis
 		rangeElem.selectAll('.x-axis text')
 			.style('transform', 'translateY(20px)translateX(-9px) rotate(-45deg)');
+
+		data.range = [1999, 2002, 2007, 2010, 2015];
+		update.rangeVals();
 
 	}
 
@@ -107,9 +111,22 @@ let draw = function() {
 	};
 }();
 
-let update = function() {
+const update = function() {
 	
+	function updateYear(evt) {
+		const chosenYear = evt.target.dataset.year;
+		//update years array
+		//no more than 5 items
+		//if selected, toggle off
+	}
+
+	function updateState(evt) {
+		data.state = evt.target.value;
+	}
+
 	function updateRangeVals() {
+		//given years array
+		//update circle fills
 
 	}
 
@@ -117,18 +134,22 @@ let update = function() {
 
 	}
 
-	function updateStateVal() {
-
-	}
-
 	return {
+		year: updateYear,
+		state: updateState,
 		rangeVals: updateRangeVals,
 		slopeChart: updateSlopeChart,
-		stateVal: updateStateVal
 	};
 }();
 
 loadData();
+
+
+/** BROWSER EVENTS  **/
+const rangeArea = document.querySelector('.year-range');
+rangeArea.addEventListener('click', update.year);
+const stateArea = document.querySelector('.state-menu');
+stateArea.addEventListener('change', update.state);
 
 // todos
 // 1 - add initialized year values
