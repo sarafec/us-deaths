@@ -21,8 +21,8 @@ function loadData() {
 		data.source = targetData;
 		// initialize year helper array in order to draw range
 		data.years = data.source[0].data.map((entry) => entry.year);
-		// initialize range selected array to zero
-		data.range = data.source[0].data.map((entry) => false);
+		// initialize range selected array
+		data.range = data.source[0].data.map((entry, index, arr) => index % 5 === 0 ? true : false);
 
 		draw.dropdown();
 		draw.slopeChart();
@@ -98,7 +98,6 @@ const draw = function() {
 		rangeElem.selectAll('.x-axis text')
 			.style('transform', 'translateY(20px)translateX(-9px) rotate(-45deg)');
 
-		data.range = [1999, 2002, 2007, 2010, 2015];
 		update.rangeVals();
 
 	}
@@ -152,7 +151,6 @@ const stateArea = document.querySelector('.state-menu');
 stateArea.addEventListener('change', update.state);
 
 // todos
-// 1 - add initialized year values
 // 2 - allow user behavior to change targetState and targetYears
 // 3 - add instructions to range element
 // 4 - create slope chart container
