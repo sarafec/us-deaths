@@ -124,8 +124,8 @@ const update = function() {
 	}
 
 	function updateRangeVals() {
-		//given years array
-		//update circle fills
+		// given rangeArea, iterate through
+		// change fill color fo those year values
 
 	}
 
