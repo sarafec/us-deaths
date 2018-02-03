@@ -27,13 +27,12 @@ function loadData() {
 		draw.dropdown();
 		draw.slopeChart();
 		draw.range();
+		draw.userInstructions();
 	});
 };
 
 const data = function() {
 	let dataSource = {};
-
-	let targetRange = [];
 
 	// defines initialized value of drop down state value
 	let targetState = 'Alabama';
@@ -41,14 +40,20 @@ const data = function() {
 	// defines all years in the data object
 	let allYears = [];
 
+	// define year choices
+	let chosenYears = [];
+
+	let yearsLeft = 5;
+
 	let chartColorsArr = ['#80b1d3', '#fb8072', '#bebada', '#ffffb3', '#8dd3c7', '#a6d854', '#e78ac3', '#8da0cb', '#fc8d62', '#66c2a5', '#fb9a99', '#33a02c', '#b2df8a', '#1f78b4', '#a6cee3', '#decbe4'];
 
 
 	return {
 		source: dataSource,
-		range: targetRange,
 		state: targetState,
-		years: allYears
+		years: allYears,
+		chosenYears: chosenYears,
+		yearsLeft: yearsLeft
 	}
 }();
 
@@ -102,10 +107,23 @@ const draw = function() {
 
 	}
 
+	function drawUserInstructions() {
+		const userInstructionArea = document.querySelector('.user-instructions');
+
+		if(data.yearsLeft === 0) {
+			userInstructionArea.textContent = 'Unselect a year to change the year';
+		} else if (data.yearsLeft === 1) {
+			userInstructionArea.textContent = `Select ${data.yearsLeft} more year`;
+		} else {
+			userInstructionArea.textContent = `Select ${data.yearsLeft} more years`;
+		}
+	}
+
 	return {
 		dropdown: drawDropdown,
 		slopeChart: drawSlopeChart,
-		range: drawRange
+		range: drawRange,
+		userInstructions: drawUserInstructions
 
 	};
 }();
@@ -113,10 +131,21 @@ const draw = function() {
 const update = function() {
 	
 	function updateYear(evt) {
-		const chosenYear = evt.target.dataset.year;
-		//update years array
-		//no more than 5 items
-		//if selected, toggle off
+		const elem = evt.target;
+		const elemYear = evt.target.dataset.year;
+
+		if(helper.yearAlreadySelected(elem)){
+			let yearIndex = data.chosenYears.indexOf(elemYear);
+			elem.classList.toggle('selected');
+			data.chosenYears.splice(yearIndex);
+			data.yearsLeft++;
+		} else if(data.yearsLeft > 0 && data.yearsLeft <= 5) {
+			elem.classList.toggle('selected');
+			data.chosenYears.push(elemYear);
+			data.yearsLeft--;
+		}
+
+		draw.userInstructions();
 	}
 
 	function updateState(evt) {
@@ -139,6 +168,17 @@ const update = function() {
 		rangeVals: updateRangeVals,
 		slopeChart: updateSlopeChart,
 	};
+}();
+
+const helper = function() {
+	function yearAlreadySelected(elem) {
+		return elem.classList.contains('selected') ? true : false;
+	}
+
+	return {
+		yearAlreadySelected: yearAlreadySelected
+	}
+
 }();
 
 loadData();
