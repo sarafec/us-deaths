@@ -191,9 +191,8 @@ const stateArea = document.querySelector('.state-menu');
 stateArea.addEventListener('change', update.state);
 
 // todos
-// 2 - allow user behavior to change targetState and targetYears
-// 3 - add instructions to range element
-// 4 - create slope chart container
-// 5 - create slope chart connectors
-// 6 - create transitions with range changes
-// 7 - add tooltip or accentuate info on hover
+// 1 - create single slope chart region
+// 2 - create multiple slope chart regions
+// 3 - add path connectors to the slope chart regions
+// 4 - add transitions to the slope chart regions and paths
+// 5 - add tooltip for more details
