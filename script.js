@@ -10,6 +10,7 @@ const constant = {
 const menu = document.querySelector('.state-menu');
 const svg =  d3.select('.chart-container');
 const slopeElem = svg.append('g').attr('class', 'slope-chart').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+const gridLinesArea = svg.append('g').attr('class', 'grid-lines').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 const rangeElem = svg.append('g').attr('class', 'year-range').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
@@ -25,7 +26,6 @@ function loadData() {
 		data.range = data.source[0].data.map((entry, index, arr) => index % 5 === 0 ? true : false);
 
 		draw.dropdown();
-		draw.slopeChart();
 		draw.range();
 		draw.userInstructions();
 	});
@@ -70,12 +70,29 @@ const draw = function() {
 
 	}
 
-	function drawSlopeChart() {
+	function makeGridlines() {
+		console.log(data.chosenYears);
+		return d3.axisBottom(constant.x)
+			.ticks(data.chosenYears.length);
+	}
 
+	function drawGridLines() {
+		constant.x.domain(data.chosenYears);
+
+		gridLinesArea.append('g')
+			.attr('class', 'grid')
+			.attr("transform", "translate(-15," + constant.height + ")")
+			.call(makeGridlines()
+				.tickSize(-constant.height)
+				.tickFormat("")
+			)
+
+		const domainPath = document.querySelector('.grid .domain');
+		const gridArea = document.querySelector('.grid');
+		gridArea.removeChild(domainPath);
 	}
 
 	function drawRange() {
-
 		constant.x.domain(data.years);
 
 		//define x axis
@@ -121,7 +138,7 @@ const draw = function() {
 
 	return {
 		dropdown: drawDropdown,
-		slopeChart: drawSlopeChart,
+		gridLines: drawGridLines,
 		range: drawRange,
 		userInstructions: drawUserInstructions
 
@@ -137,7 +154,7 @@ const update = function() {
 		if(helper.yearAlreadySelected(elem)){
 			let yearIndex = data.chosenYears.indexOf(elemYear);
 			elem.classList.toggle('selected');
-			data.chosenYears.splice(yearIndex);
+			data.chosenYears.splice(yearIndex, 1);
 			data.yearsLeft++;
 		} else if(data.yearsLeft > 0 && data.yearsLeft <= 5) {
 			elem.classList.toggle('selected');
@@ -146,6 +163,7 @@ const update = function() {
 		}
 
 		draw.userInstructions();
+		update.gridLines();
 	}
 
 	function updateState(evt) {
@@ -158,7 +176,14 @@ const update = function() {
 
 	}
 
-	function updateSlopeChart() {
+	function updateGridlines() {
+		const gridLines = document.querySelector('.grid-lines');
+
+		while(gridLines.firstChild) {
+			gridLines.removeChild(gridLines.firstChild);
+		}
+
+		draw.gridLines();
 
 	}
 
@@ -166,7 +191,7 @@ const update = function() {
 		year: updateYear,
 		state: updateState,
 		rangeVals: updateRangeVals,
-		slopeChart: updateSlopeChart,
+		gridLines: updateGridlines
 	};
 }();
 
