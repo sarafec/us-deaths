@@ -216,8 +216,8 @@ const stateArea = document.querySelector('.state-menu');
 stateArea.addEventListener('change', update.state);
 
 // todos
-// 1 - create single slope chart region
-// 2 - create multiple slope chart regions
-// 3 - add path connectors to the slope chart regions
-// 4 - add transitions to the slope chart regions and paths
-// 5 - add tooltip for more details
+// 1 - add y axis for ordinal data (1-5)
+// 2 - add data specific circles
+// 3 - add connectors between
+// 4 - add transitions
+// 5 - add tooltip
